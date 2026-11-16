@@ -9,6 +9,7 @@ import jakarta.annotation.PreDestroy;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import producer.WikimediaChangesHandler;
+import com.launchdarkly.eventsource.ConnectStrategy;
 
 import java.net.URI;
 
@@ -33,7 +34,13 @@ public class WikimediaChangesProducer {
                 new WikimediaChangesHandler(kafkaTemplate, TOPIC);
 
         EventSource.Builder eventSourceBuilder =
-                new EventSource.Builder(URI.create(URL));
+                new EventSource.Builder(
+                        ConnectStrategy.http(URI.create(URL))
+                                .header(
+                                        "User-Agent",
+                                        "WikiStream/0.0.1 (https://github.com/Piyush-1205/WikiStream)"
+                                )
+                );
 
         backgroundEventSource =
                 new BackgroundEventSource.Builder(

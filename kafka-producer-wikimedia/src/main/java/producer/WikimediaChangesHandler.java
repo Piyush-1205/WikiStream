@@ -21,7 +21,7 @@ public class WikimediaChangesHandler implements BackgroundEventHandler {
 
     @Override
     public void onOpen() throws Exception {
-
+        logger.info("========== WIKIMEDIA CONNECTION OPENED ==========");
     }
 
     @Override
@@ -30,9 +30,17 @@ public class WikimediaChangesHandler implements BackgroundEventHandler {
     }
 
     @Override
-    public void onMessage(String s, MessageEvent messageEvent) throws Exception {
-        logger.info("Event data: " + messageEvent.getData());
-        kafkaTemplate.send(topic, messageEvent.getData());
+    public void onMessage(String s, MessageEvent messageEvent) {
+        String data = messageEvent.getData();
+
+//        logger.info("Event data -> {}", data);
+
+        kafkaTemplate.send(topic, data)
+                .whenComplete((result, exception) -> {
+                    if (exception != null) {
+                        logger.error("Failed to publish event", exception);
+                    }
+                });
     }
 
     @Override
@@ -42,6 +50,7 @@ public class WikimediaChangesHandler implements BackgroundEventHandler {
 
     @Override
     public void onError(Throwable throwable) {
-
+        logger.error("========== WIKIMEDIA CONNECTION ERROR ==========",
+                throwable);
     }
 }
