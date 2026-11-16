@@ -20,3 +20,4 @@ public class SpringBootProducerApplication implements CommandLineRunner {
         wikimediaChangesProducer.sendMessage();
     }
 }
+

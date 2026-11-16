@@ -9,6 +9,8 @@ import org.springframework.kafka.core.KafkaTemplate;
 public class WikimediaChangesHandler implements BackgroundEventHandler {
 
     private static Logger logger = org.slf4j.LoggerFactory.getLogger(WikimediaChangesHandler.class);
+
+
     private KafkaTemplate<String, String> kafkaTemplate;
     private String topic;
 
