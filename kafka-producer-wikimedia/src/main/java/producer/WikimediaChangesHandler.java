@@ -33,7 +33,7 @@ public class WikimediaChangesHandler implements BackgroundEventHandler {
     public void onMessage(String s, MessageEvent messageEvent) {
         String data = messageEvent.getData();
 
-//        logger.info("Event data -> {}", data);
+        logger.info("Event data -> {}", data);
 
         kafkaTemplate.send(topic, data)
                 .whenComplete((result, exception) -> {
